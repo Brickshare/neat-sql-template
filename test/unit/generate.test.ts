@@ -1,4 +1,4 @@
-import sqlTemplate from '@src/generate';
+import { sqlTemplate } from '@src/generate';
 
 const { insert, insertMultiple, update } = sqlTemplate;
 
