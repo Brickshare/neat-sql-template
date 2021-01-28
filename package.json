@@ -1,0 +1,44 @@
+{
+  "name": "neat-sql-template",
+  "version": "1.0.0",
+  "description": "a neat way to write SQL templates in Node.js",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -rf dist && mkdir dist",
+    "compile": "tsc -p ./tsconfig.build.json && npm run rewrite && cp package.json dist/",
+    "rewrite": "ef-tspm -c tsconfig.build.json",
+    "distribute": "npm run build && npm publish dist",
+    "test": "npm run test:unit",
+    "test:unit": "cross-env NODE_ENV=dev jest -c jest.config.unit.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brickshare/neat-sql-template.git"
+  },
+  "author": "Rasmus von Syberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Brickshare/neat-sql-template/issues"
+  },
+  "homepage": "https://github.com/Brickshare/neat-sql-template#readme",
+  "dependencies": {
+    "lodash.zip": "^4.2.0",
+    "sqlstring": "^2.3.2",
+    "winston": "^3.3.3",
+    "winston-gke-formatter": "0.0.2"
+  },
+  "devDependencies": {
+    "@ef-carbon/tspm": "^2.2.5",
+    "@types/jest": "^26.0.15",
+    "@types/lodash.zip": "^4.2.6",
+    "@types/sqlstring": "^2.3.0",
+    "cross-env": "^7.0.3",
+    "jest": "^26.6.3",
+    "mysql-schema-ts": "^1.6.2",
+    "prettier": "^1.19.1",
+    "ts-jest": "^26.4.4",
+    "tslib": "^2.1.0",
+    "typescript": "^4.1.3"
+  }
+}
