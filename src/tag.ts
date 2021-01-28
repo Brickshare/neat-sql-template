@@ -49,7 +49,6 @@ class SQLStatement {
   }
 }
 
-const SQL = (template: TemplateStringsArray, ...args: any[]): SQLStatement => {
+export const SQL = (template: TemplateStringsArray, ...args: any[]): SQLStatement => {
   return new SQLStatement(Array.from(template), args);
 };
-export default SQL;
