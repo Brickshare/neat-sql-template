@@ -26,9 +26,8 @@ export const update = <T extends { id: number; [key: string]: any }>(entity: T, 
   return [`UPDATE ${tableName} SET ${set} WHERE id=${entity.id};`, values];
 };
 
-const sqlTemplate = {
+export const sqlTemplate = {
   insert,
   insertMultiple,
   update
 };
-export default sqlTemplate;
