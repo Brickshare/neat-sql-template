@@ -8,7 +8,9 @@ export const insert = <T extends { [key: string]: any }>(entry: T, tableName: st
 };
 
 export const insertMultiple = <T extends { [key: string]: any }>(entries: T[], tableName: string): QueryType => {
-  const filteredEntries = entries.map(entry => Object.entries(entry).filter(([key, value]) => key !== 'id' && !!value));
+  const filteredEntries = entries.map(entry =>
+    Object.entries(entry).filter(([key, value]) => key !== 'id' && value !== undefined)
+  );
   const [first] = filteredEntries;
   const entryKeys = first.map(([key]) => key);
   const keys = `(${entryKeys.join(',')})`;
