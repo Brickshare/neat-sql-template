@@ -1,6 +1,6 @@
 'use strict';
 import { createListOfSqlParams } from '@src/util';
-import { Query } from './types';
+import { SQLTemplate, Query } from './types';
 import zip from 'lodash.zip';
 
 const getUniqueValues = (array: any[]) => (Array.isArray(array) ? [...new Set(array)] : array);
@@ -18,7 +18,7 @@ const argumentToParameters = (arg: any): string => {
   return '?';
 };
 
-class SQLStatement {
+class SQLStatement implements SQLTemplate {
   private statement: string = '';
   private arguments: any[] = [];
 
