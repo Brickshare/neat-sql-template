@@ -1,6 +1,7 @@
 # neat-mysql
 
 A library to generate SQL templates in a neat way. Works well with either of:
+g
 
 - [neat-mysql](https://github.com/Brickshare/neat-mysql#readme)
 - [mysql2](https://github.com/sidorares/node-mysql2#readme)
@@ -25,6 +26,21 @@ const statement = SQL`
 `;
 // { sql: 'UPDATE people SET name = ? WHERE id = ?', values: ['John', 1] }
 
+const concatenatedStatement = SQL`
+  UPDATE people SET name = (${SQL`SELECT name from people WHERE id = ${2}`}) WHERE id = ${1}
+`;
+/*
+  {
+    sql: 'UPDATE people SET name = (SELECT name from people WHERE id = ?) WHERE id = ?;',
+    values: [2, 1]
+  }
+*/
+
+{
+      statement: '\n' +
+        'UPDATE people SET name = SELECT name from people WHERE id = ? WHERE id = ?\n',
+      arguments: [ '2', '1' ]
+    }
 
 ```
 

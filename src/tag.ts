@@ -12,9 +12,6 @@ const argumentToParameters = (arg: any): string => {
   if (Array.isArray(arg)) {
     return `(${createListOfSqlParams(arg.length)})`;
   }
-  if (typeof arg === 'object') {
-    return '?';
-  }
   return '?';
 };
 
