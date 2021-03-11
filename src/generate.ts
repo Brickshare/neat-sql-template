@@ -7,9 +7,13 @@ export const insert = <T extends { [key: string]: any }>(entry: T, tableName: st
   return insertMultiple([entry], tableName);
 };
 
-export const insertMultiple = <T extends { [key: string]: any }>(entries: T[], tableName: string): SQLTemplate => {
+export const insertMultiple = <T extends { [key: string]: any }>(
+  entries: T[],
+  tableName: string,
+  includeId = false
+): SQLTemplate => {
   const filteredEntries = entries.map(entry =>
-    Object.entries(entry).filter(([key, value]) => key !== 'id' && value !== undefined)
+    Object.entries(entry).filter(([key, value]) => (key !== 'id' || includeId) && value !== undefined)
   );
 
   const [first] = filteredEntries;
