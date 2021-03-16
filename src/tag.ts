@@ -10,7 +10,7 @@ const argumentToParameters = (arg: any): string => {
     return '';
   }
   if (Array.isArray(arg)) {
-    return `(${createListOfSqlParams(arg.length)})`;
+    return `${createListOfSqlParams(arg.length)}`;
   }
   return '?';
 };
