@@ -23,8 +23,7 @@ class SQLStatement implements SQLTemplate {
     this.arguments = args
       .map(getUniqueValues)
       .reduce((acc, arg) => [...acc, ...(arg instanceof SQLStatement ? arg.values : [arg])], [])
-      .flat()
-      .map(value => String(value));
+      .flat();
     const combined = zip(strings, args);
     this.statement = combined.reduce((statement: string, [s, a]: any) => {
       return `${statement}${s}${a instanceof SQLStatement ? a.statement : argumentToParameters(a)}`;
