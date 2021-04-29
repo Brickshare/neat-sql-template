@@ -1,6 +1,6 @@
 {
   "name": "neat-sql-template",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "a neat way to write SQL templates in Node.js",
   "main": "index.js",
   "scripts": {
