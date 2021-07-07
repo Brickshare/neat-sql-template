@@ -20,7 +20,7 @@ export type JSONObject = { [member: string]: JSONValue };
 export type JSONArray = Array<JSONValue>;
 export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
 
-export type QueryArg = JSONPrimitive | Date | Buffer | ArrayBuffer | JSONValue | QueryArg[] | undefined;
+export type QueryArg = JSONPrimitive | Date | Buffer | ArrayBuffer | JSONValue | QueryArg[];
 
 export type Query = [string] | [string, QueryArg[]];
 
