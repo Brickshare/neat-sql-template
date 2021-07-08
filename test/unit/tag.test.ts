@@ -32,4 +32,22 @@ describe('sql template', () => {
       arguments: [1, 2, 3, 4, 'hello']
     });
   });
+
+  it(`should handle empty strings in args`, () => {
+    expect({ ...SQL`SELECT * FROM table WHERE value = ${''}` }).toEqual({
+      statement: `SELECT * FROM table WHERE value = ?`,
+      arguments: ['']
+    });
+  });
+
+  it(`should handle nulls in args`, () => {
+    expect({ ...SQL`INSERT INTO table SET value = ${null}` }).toEqual({
+      statement: `INSERT INTO table SET value = ?`,
+      arguments: [null]
+    });
+  });
+
+  it(`should throw Error when undefined in args`, () => {
+    expect(() => ({ ...SQL`INSERT INTO table SET value = ${undefined}`})).toThrowError('MySQL arguments cannot contain undefined');
+  });
 });
