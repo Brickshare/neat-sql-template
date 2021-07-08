@@ -15,10 +15,6 @@ const argumentToParameters = (arg: any): string => {
   return '?';
 };
 
-const errorIfArgIsUndefined = (value: any) => {
-  if (value === undefined) throw Error('MySQL arguments cannot contain undefined');
-};
-
 class SQLStatement implements SQLTemplate {
   private statement: string = '';
   private arguments: QueryArg[] = [];
@@ -28,7 +24,9 @@ class SQLStatement implements SQLTemplate {
       .map(getUniqueValues) // if value is an array, remove dublicates in that array
       .reduce((acc, arg) => [...acc, ...(arg instanceof SQLStatement ? arg.values : [arg])], []) // extract and include args from SQLTemplates
       .flat();
-    this.arguments.forEach(errorIfArgIsUndefined);
+    if (this.arguments.some(arg => arg === undefined)) {
+      throw Error('MySQL arguments cannot contain undefined');
+    }
     const combined = zip(strings, args);
     this.statement = combined.reduce((statement: string, [s, a]: any) => {
       return `${statement}${s}${a instanceof SQLStatement ? a.statement : argumentToParameters(a)}`;
