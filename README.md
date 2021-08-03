@@ -79,4 +79,20 @@ const updateStatement = sqlTemplate.update({ ...people[0], id: 1 }, 'people');
   }
 */
 
+const findStatement = sqlTemplate.find({ id: 1 }, 'people');
+/*
+  {
+    sql: 'SELECT * FROM people WHERE id = ?',
+    values: [1]
+  }
+*/
+
+const removeStatement = sqlTemplate.remove({ id: 1 }, 'people');
+/*
+  {
+    sql: 'DELETE FROM people WHERE id = ?',
+    values: [1]
+  }
+*/
+
 ```
