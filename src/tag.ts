@@ -15,7 +15,7 @@ const argumentToParameters = (arg: any): string => {
   return '?';
 };
 
-class SQLStatement implements SQLTemplate {
+export class SQLStatement implements SQLTemplate {
   private statement: string = '';
   private arguments: QueryArg[] = [];
 
