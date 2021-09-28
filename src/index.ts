@@ -1,4 +1,4 @@
 export * from './types';
-export * from './generate';
+export * from './factory';
 export * from './util';
 export * from './tag';
