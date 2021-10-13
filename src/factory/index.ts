@@ -34,7 +34,7 @@ export const update = <T extends Queryable>(
   const statement = `UPDATE ${tableName}`;
   const entries = Object.entries(update).filter(([key, value]) => key !== 'id' && value !== undefined);
   const set = `${entries.map(([key]) => `${key} = ?`).join(', ')}`;
-  const values = entries.map(([, value]) => value);
+  const values = entries.map(([, value]) => formatParameter(value));
   const parsed = parseOptions(operatorValue);
 
   return {
@@ -52,7 +52,10 @@ export const insert = <T extends { [key: string]: any }>(entries: T | T[], table
   const [first] = filteredEntries;
   const entryKeys = first.map(([key]) => key);
   const keys = `(${entryKeys.join(',')})`;
-  const values = filteredEntries.reduce((acc, entry) => [...acc, ...entry.map(([, value]) => value)], []);
+  const values = filteredEntries.reduce(
+    (acc, entry) => [...acc, ...entry.map(([, value]) => formatParameter(value))],
+    [],
+  );
 
   const sqlParams = filteredEntries.map(() => `(${createListOfSqlParams(entryKeys.length)})`);
   return {
@@ -77,4 +80,15 @@ const parseOptions = <T extends Queryable>(
     sql: `${whereCondition.sql}${limiter}${ordering}`.trim(),
     values: whereCondition.values,
   };
+};
+
+const formatParameter = (value: unknown): string | number | Date => {
+  switch (typeof value) {
+    case 'object':
+      return value instanceof Date ? value : JSON.stringify(value);
+    case 'string':
+    case 'number':
+    default:
+      return value as string | number;
+  }
 };
