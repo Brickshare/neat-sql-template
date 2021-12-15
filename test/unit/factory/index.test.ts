@@ -73,7 +73,7 @@ describe('update', () => {
 });
 
 describe('insert', () => {
-  it(`returns insert statement from array of objects`, async () => {
+  it(`should return insert statement from array of objects`, async () => {
     expect(insert([{ a: 'a', b: 2 }], 'table')).toEqual({
       sql: `INSERT INTO table (a,b) VALUES (?,?);`,
       values: ['a', 2],
@@ -88,7 +88,25 @@ describe('insert', () => {
     expect(statement).toEqual({ sql: `INSERT INTO table (a,b) VALUES (?,?),(?,?);`, values: ['a', 2, 'c', 5] });
   });
 
-  it(`returns insert statement from single object`, async () => {
+  it(`should work for array of objects with different sets of keys and treat undefined as 'NULL'`, async () => {
+    expect(insert([{ a: 'a', b: 2 }], 'table')).toEqual({
+      sql: `INSERT INTO table (a,b) VALUES (?,?);`,
+      values: ['a', 2],
+    });
+    const statement = insert(
+      [
+        { a: 'a', b: 2, c: null, e: undefined, f: 0 },
+        { a: 'c', b: 5, c: 'hello', d: 'hello' },
+      ],
+      'table',
+    );
+    expect(statement).toEqual({
+      sql: `INSERT INTO table (a,b,c,e,f,d) VALUES (?,?,?,?,?,?),(?,?,?,?,?,?);`,
+      values: ['a', 2, null, null, 0, null, 'c', 5, 'hello', null, null, 'hello'],
+    });
+  });
+
+  it(`should return insert statement from single object`, async () => {
     expect(insert({ a: 'a', b: 2 }, 'table')).toEqual({
       sql: `INSERT INTO table (a,b) VALUES (?,?);`,
       values: ['a', 2],

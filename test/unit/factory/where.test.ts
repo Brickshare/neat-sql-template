@@ -99,7 +99,6 @@ describe('where', () => {
   });
 
   it(`should default multiple keys to AND`, () => {
-    const now = new Date();
     const statement = where<TestType>({ name: { $unlike: 'name' }, id: { $ne: null } });
     expect(statement).toEqual({ sql: `WHERE name NOT LIKE ? AND id IS NOT NULL`, values: ['name'] });
   });

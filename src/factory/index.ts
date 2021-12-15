@@ -20,10 +20,9 @@ export const remove = <T extends Queryable>(
   tableName: string,
   options: QueryOptions<T> = {},
 ): SQLTemplate => {
-  const statement = `DELETE FROM ${tableName}`;
   const parsed = parseOptions(operatorValue, options);
 
-  return { sql: `${statement} ${parsed.sql}`.trim(), values: parsed.values };
+  return { sql: `DELETE FROM ${tableName} ${parsed.sql}`.trim(), values: parsed.values };
 };
 
 export const update = <T extends Queryable>(
@@ -47,22 +46,30 @@ export const insert = <T extends { [key: string]: any }>(entries: T | T[], table
   if (!Array.isArray(entries)) {
     return insert([entries], tableName);
   }
-  const filteredEntries = entries.map(entry => Object.entries(entry).filter(([key, value]) => value !== undefined));
 
-  const [first] = filteredEntries;
-  const entryKeys = first.map(([key]) => key);
+  const entryKeys = findKeys(entries);
   const keys = `(${entryKeys.join(',')})`;
-  const values = filteredEntries.reduce(
-    (acc, entry) => [...acc, ...entry.map(([, value]) => formatParameter(value))],
-    [],
-  );
 
-  const sqlParams = filteredEntries.map(() => `(${createListOfSqlParams(entryKeys.length)})`);
+  const values = entries.reduce(
+    (acc, entry) =>
+      acc.concat(
+        entryKeys.map(key => {
+          const value = entry[key];
+          return value !== null && value !== undefined ? formatParameter(value) : null;
+        }),
+      ),
+    [] as any[],
+  );
+  const sqlParams = entries.map(() => `(${createListOfSqlParams(entryKeys.length)})`);
+
   return {
     sql: `INSERT INTO ${tableName} ${keys} VALUES ${sqlParams.join(',')};`,
     values,
   };
 };
+
+const findKeys = <T extends { [key: string]: any }>(entries: T[]): string[] =>
+  entries.reduce((allKeys, entry) => Array.from(new Set(allKeys.concat(Object.keys(entry)))), [] as string[]);
 
 const parseOptions = <T extends Queryable>(
   operatorValue: OperatorValue<T> = {},

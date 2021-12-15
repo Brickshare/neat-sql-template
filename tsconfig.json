@@ -1,9 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
-    "module": "commonjs",
-    "lib": ["es2017", "esnext"],
+    "target": "ES6",
+    "module": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "esModuleInterop": true,
+
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
 
     "allowJs": false,
     "checkJs": false,
@@ -18,7 +26,6 @@
     "importHelpers": true,
     "downlevelIteration": true,
     "noEmitOnError": false,
-    "strict": false,
     "noImplicitAny": false,
     "strictNullChecks": true,
     "noImplicitThis": true,
@@ -29,17 +36,19 @@
 
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
 
-    "resolveJsonModule": true,
-    "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "@src/*": ["src/*"],
+      "@test/*": ["test/*"]
     },
-    "allowSyntheticDefaultImports": true,
 
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "plugins": [
+      { "transform": "typescript-transform-paths" },
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
   },
   "include": ["src/**/*.ts", "src/**/*.json", "test/**/*.ts"],
   "exclude": ["node_modules"]
