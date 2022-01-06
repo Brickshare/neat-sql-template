@@ -16,7 +16,7 @@ npm i neat-sql-template
 
 ## Usage
 
-### Template using tag
+### Prepared statement using tag
 
 ```
 import { SQL } from 'neat-sql-template';
@@ -44,7 +44,7 @@ const concatenatedStatement = SQL`
 
 ```
 
-### Template using javascript objects
+### Prepared statement using javascript objects
 
 ```
 import { sqlTemplate } from 'neat-sql-template';
@@ -92,6 +92,79 @@ const removeStatement = sqlTemplate.remove({ id: 1 }, 'people');
   {
     sql: 'DELETE FROM people WHERE id = ?',
     values: [1]
+  }
+*/
+
+```
+
+### Prepared statement using mongodb-like API
+
+```
+const findStatement = find<Type>({ id: { $ne: 123 } }, 'table');
+/*
+  {
+    sql: 'SELECT * FROM table WHERE id != ?',
+    values: [123]
+  }
+*/
+
+const findStatement = find<Type>({ id: { $ne: null } }, 'table');
+/*
+  {
+    sql: 'SELECT * FROM table WHERE id IS NOT NULL',
+    values: []
+  }
+*/
+
+const deleteStatement = remove<Type>({ created_at: { $lt: new Date() } }, 'table');
+/*
+  {
+    sql: 'DELETE FROM table WHERE created_at < ?',
+    values: [Date(...)]
+  }
+*/
+
+const findStatement = find<Type>({ name: { $unlike: 'name' } }, 'table');
+/*
+  {
+    sql: 'SELECT * FROM table WHERE name NOT LIKE ?',
+    values: ['name']
+  }
+*/
+
+// explicit AND
+const findStatement = find<Type>({
+  $and: [{ id: 123 }, { name: 'name' }],
+}, 'table');
+
+/*
+  {
+    sql: 'SELECT * FROM table WHERE id = ? AND name = ?',
+    values: [123, 'name']
+  }
+*/
+
+// implicit AND
+const findStatement = find<Type>({
+  name: { $unlike: 'name' },
+  id: { $ne: null }
+}, 'table');
+
+/*
+  {
+    sql: 'SELECT * FROM table WHERE name NOT LIKE ? AND id IS NOT NULL',
+    values: ['name']
+  }
+*/
+
+const findStatement = find<Type>({
+  $or: [{ id: 123 }, { name: 'name' }],
+}, 'table');
+
+/*
+  {
+    sql: 'SELECT * FROM table WHERE id = ? OR name = ?',
+    values: [123, 'name']
   }
 */
 
