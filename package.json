@@ -1,13 +1,13 @@
 {
   "name": "neat-sql-template",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "a neat way to write SQL templates in Node.js",
   "main": "index.js",
   "scripts": {
     "build": "npm run clean && npm run compile",
     "clean": "rm -rf dist && mkdir dist",
     "compile": "ttsc -p ./tsconfig.build.json && cp package.json dist/",
-    "distribute": "npm run build && npm publish dist",
+    "distribute": "npm run build && npm publish ./dist",
     "test": "npm run test:unit",
     "test:unit": "cross-env NODE_ENV=dev jest -c jest.config.unit.js"
   },
